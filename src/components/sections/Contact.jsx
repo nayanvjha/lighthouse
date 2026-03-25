@@ -139,13 +139,13 @@ function Contact() {
   ]
 
   return (
-    <section id="contact" ref={sectionRef} className="mars-section border-b border-accent-blue/25 px-4 py-18 md:px-12">
+    <section id="contact" ref={sectionRef} className="mars-section border-b border-accent-blue/25 p-4 md:p-12 lg:p-20">
       <div className="mars-noise" aria-hidden="true" />
 
       <div className="relative z-10 mx-auto w-full max-w-6xl">
         <SectionLabel text="MARS_COLONY_COMMS" />
         <div ref={headingRef} className="opacity-0">
-          <h2 data-animate="fadeInUp" className="font-heading text-4xl tracking-[0.08em] text-white md:text-5xl">
+          <h2 data-animate="fadeInUp" className="font-heading text-3xl tracking-[0.08em] text-white md:text-5xl">
             LET&apos;S BUILD THE FUTURE
           </h2>
           <p className="mt-4 max-w-2xl text-base text-gray-300 md:text-lg">
@@ -154,7 +154,7 @@ function Contact() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-5">
+        <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-5">
           <div className="lg:col-span-3">
             <HudPanel className="mars-form-panel" glowColor="accent-blue">
               <form data-animate="staggerChildren" className="mars-form" onSubmit={handleSubmit}>

@@ -47,7 +47,7 @@ function Footer() {
   return (
     <footer
       id="footer"
-      className="relative border-t border-accent-blue/45 bg-black/35 px-5 py-12 md:px-8"
+      className="relative border-t border-accent-blue/45 bg-black/35 px-4 py-12 md:px-12 lg:px-20"
     >
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-7 text-center">
         <h3 className="font-heading text-xl tracking-[0.28em] text-white md:text-2xl">NAYAN KUMAR</h3>

@@ -158,10 +158,10 @@ function About() {
   }, [])
 
   return (
-    <section id="about" ref={sectionRef} className="border-b border-accent-blue/25 px-4 py-18 md:px-12">
+    <section id="about" ref={sectionRef} className="border-b border-accent-blue/25 p-4 md:p-12 lg:p-20">
       <div className="mx-auto w-full max-w-6xl">
-        <div className="about-layout-grid mt-5">
-          <div ref={photoWrapRef} className="about-photo-col">
+        <div className="mt-5 grid grid-cols-1 gap-6 lg:grid-cols-5 lg:items-start lg:gap-8">
+          <div ref={photoWrapRef} className="about-photo-col order-1 lg:col-span-2">
             <div className="about-photo-radar" aria-hidden="true">
               <span className="about-photo-radar-ring about-photo-radar-ring-1" />
               <span className="about-photo-radar-ring about-photo-radar-ring-2" />
@@ -187,11 +187,20 @@ function About() {
                 CLEARANCE: LEVEL 5
               </p>
             </div>
+
+            <div ref={reactorWrapRef} className="about-reactor-col order-3 mt-8 opacity-0 lg:order-0">
+              <Suspense fallback={<div className="mx-auto h-57.5 w-57.5 md:h-75 md:w-75" />}>
+                <ArcReactor />
+              </Suspense>
+            </div>
           </div>
 
-          <div ref={contentWrapRef} className="about-content-col opacity-0">
+          <div
+            ref={contentWrapRef}
+            className="about-content-col order-2 opacity-0 lg:col-span-3"
+          >
             <SectionLabel text="ABOUT_PILOT" />
-            <h2 data-animate="fadeInUp" className="font-heading text-3xl tracking-[0.08em] text-white md:text-4xl">
+            <h2 data-animate="fadeInUp" className="font-heading text-3xl tracking-[0.08em] text-white md:text-5xl">
               THE PILOT
             </h2>
             <p className="mt-4 max-w-3xl text-base leading-relaxed text-gray-300 md:text-lg">
@@ -212,7 +221,7 @@ function About() {
             <div
               ref={statsGridRef}
               data-animate="staggerChildren"
-              className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
+              className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
             >
               {stats.map((stat, index) => (
                 <div key={stat.label} className="about-stat-card opacity-0">
@@ -234,12 +243,6 @@ function About() {
                 ))}
               </div>
             </div>
-          </div>
-
-          <div ref={reactorWrapRef} className="about-reactor-col opacity-0">
-            <Suspense fallback={<div className="mx-auto h-57.5 w-57.5 md:h-75 md:w-75" />}>
-              <ArcReactor />
-            </Suspense>
           </div>
         </div>
       </div>

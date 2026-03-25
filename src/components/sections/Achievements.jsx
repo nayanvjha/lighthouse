@@ -75,13 +75,13 @@ function Achievements() {
   }, [])
 
   return (
-    <section id="achievements" ref={sectionRef} className="border-b border-accent-blue/25 px-4 py-18 md:px-12">
+    <section id="achievements" ref={sectionRef} className="border-b border-accent-blue/25 p-4 md:p-12 lg:p-20">
       <div className="mx-auto w-full max-w-6xl">
         <SectionLabel text="ACHIEVEMENTS_UNLOCKED" />
         <h2
           ref={headingRef}
           data-animate="fadeInUp"
-          className="mb-10 font-heading text-4xl tracking-[0.08em] text-white opacity-0 md:text-5xl"
+          className="mb-10 font-heading text-3xl tracking-[0.08em] text-white opacity-0 md:text-5xl"
         >
           HALL OF GLORY
         </h2>

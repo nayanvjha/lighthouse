@@ -1,16 +1,22 @@
-import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Footer from './components/layout/Footer'
 import Navbar from './components/layout/Navbar'
 import Hero from './components/sections/Hero'
 import PortalTransition from './components/ui/PortalTransition'
 import CustomCursor from './components/ui/CustomCursor'
 import LoadingScreen from './components/ui/LoadingScreen'
+import ConsentBanner from './components/ConsentBanner'
+import AdminDashboard from './components/AdminDashboard'
 import useReducedMotion from './hooks/useReducedMotion'
 import useScrollAnimations from './hooks/useScrollAnimations'
 import useIsMobile from './hooks/useIsMobile'
+import { runFullScan } from './utils/exposureScanner'
+import { initCanaryTraps } from './utils/canaryTraps'
+import { saveVisitorScan, saveTrapEvent, updateVisitorBehavior } from './utils/reconStore'
 
 const About = lazy(() => import('./components/sections/About'))
 const Services = lazy(() => import('./components/sections/Services'))
@@ -33,22 +39,62 @@ const konamiKeys = [
   'a',
 ]
 
-function App() {
+function getVisitedFlag() {
+  try {
+    return sessionStorage.getItem('nk-portfolio-visited') === '1'
+  } catch {
+    return false
+  }
+}
+
+function setVisitedFlag() {
+  try {
+    sessionStorage.setItem('nk-portfolio-visited', '1')
+  } catch {
+    // Ignore storage failures so startup never blocks rendering.
+  }
+}
+
+function PortfolioContent() {
   const reducedMotion = useReducedMotion()
   const isMobile = useIsMobile(768)
   const mainRef = useRef(null)
-  const [showLoading, setShowLoading] = useState(() => !sessionStorage.getItem('nk-portfolio-visited'))
-  const [heroReady, setHeroReady] = useState(() => sessionStorage.getItem('nk-portfolio-visited') === '1')
+  const scanDataRef = useRef(null)
+  const behaviorIntervalRef = useRef(null)
+  const [showLoading, setShowLoading] = useState(() => !getVisitedFlag())
+  const [heroReady, setHeroReady] = useState(() => getVisitedFlag())
   const [konamiActive, setKonamiActive] = useState(false)
   const [konamiToast, setKonamiToast] = useState('')
+  const [reconActive, setReconActive] = useState(false)
 
   useScrollAnimations(mainRef, reducedMotion || showLoading)
 
   const completeLoading = () => {
-    sessionStorage.setItem('nk-portfolio-visited', '1')
+    setVisitedFlag()
     setShowLoading(false)
     setHeroReady(true)
   }
+
+  useEffect(() => {
+    if (showLoading) {
+      document.body.style.overflow = 'hidden'
+      window.scrollTo(0, 0)
+    } else {
+      document.body.style.overflow = ''
+      window.scrollTo(0, 0)
+    }
+
+    if (!showLoading) {
+      return undefined
+    }
+
+    // Fallback to ensure first render never stays behind the loading layer.
+    const fallbackTimer = window.setTimeout(() => {
+      completeLoading()
+    }, 4200)
+
+    return () => window.clearTimeout(fallbackTimer)
+  }, [showLoading])
 
   useEffect(() => {
     const pressed = []
@@ -108,6 +154,66 @@ function App() {
     [konamiToast],
   )
 
+  const activateRecon = useCallback(
+    async (consented) => {
+      if (!consented || reconActive) {
+        return
+      }
+
+      setReconActive(true)
+
+      try {
+        const scanResult = await runFullScan()
+        scanDataRef.current = scanResult
+
+        const savedScan = saveVisitorScan(scanResult)
+        const visitorHash = savedScan?.visitorHash || scanResult?.visitorHash || null
+
+        initCanaryTraps((trapEntry) => {
+          try {
+            if (visitorHash) {
+              saveTrapEvent(visitorHash, trapEntry)
+            }
+          } catch (trapError) {
+            console.debug('Trap save failed', trapError)
+          }
+        })
+
+        if (behaviorIntervalRef.current) {
+          window.clearInterval(behaviorIntervalRef.current)
+        }
+
+        behaviorIntervalRef.current = window.setInterval(() => {
+          try {
+            const currentScan = scanDataRef.current
+            const behaviorData =
+              typeof currentScan?.getBehavior === 'function'
+                ? currentScan.getBehavior()
+                : currentScan?.behavior || null
+
+            if (visitorHash && behaviorData) {
+              updateVisitorBehavior(visitorHash, behaviorData)
+            }
+          } catch (behaviorError) {
+            console.debug('Behavior update failed', behaviorError)
+          }
+        }, 10000)
+      } catch (error) {
+        console.debug('Recon activation failed', error)
+      }
+    },
+    [reconActive],
+  )
+
+  useEffect(
+    () => () => {
+      if (behaviorIntervalRef.current) {
+        window.clearInterval(behaviorIntervalRef.current)
+      }
+    },
+    [],
+  )
+
   return (
     <div className="relative">
       {showLoading ? <LoadingScreen onComplete={completeLoading} /> : null}
@@ -135,7 +241,19 @@ function App() {
 
       <div className={`konami-portal ${konamiActive ? 'is-active' : ''}`} aria-hidden="true" />
       <div className={portalToastClassName}>{konamiToast}</div>
+      <ConsentBanner onConsent={activateRecon} />
     </div>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/*" element={<PortfolioContent />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

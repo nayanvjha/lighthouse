@@ -5,7 +5,7 @@ import { Bloom, EffectComposer } from '@react-three/postprocessing'
 import useReducedMotion from '../../hooks/useReducedMotion'
 import useIsMobile from '../../hooks/useIsMobile'
 
-const ReactorGroup = memo(function ReactorGroup({ mouse, reducedMotion, effectsEnabled }) {
+const ReactorGroup = memo(function ReactorGroup({ mouse, reducedMotion, effectsEnabled, sceneScale }) {
   const rootRef = useRef(null)
   const innerRingRef = useRef(null)
   const middleRingRef = useRef(null)
@@ -26,7 +26,7 @@ const ReactorGroup = memo(function ReactorGroup({ mouse, reducedMotion, effectsE
 
     if (rootRef.current) {
       const pulse = 1 + Math.sin(t * 1.9) * (reducedMotion ? 0.02 : 0.05)
-      rootRef.current.scale.setScalar(pulse)
+      rootRef.current.scale.setScalar(pulse * sceneScale)
 
       const easing = reducedMotion ? 0.04 : 0.08
       rootRef.current.rotation.x += (mouse.current.y * 0.087 - rootRef.current.rotation.x) * easing
@@ -122,6 +122,7 @@ function ArcReactor() {
   }, [gpu])
 
   const effectsEnabled = !reducedMotion && gpuTier >= 2
+  const sceneScale = isMobile ? 0.62 : 1
 
   const handlePointerMove = (event) => {
     const rect = event.currentTarget.getBoundingClientRect()
@@ -134,13 +135,18 @@ function ArcReactor() {
   return (
     <div className="mx-auto h-57.5 w-57.5 md:h-75 md:w-75" onPointerMove={handlePointerMove}>
       <Canvas
-        dpr={isMobile ? [1, 1.4] : [1, 2]}
+        dpr={isMobile ? [1, 1.2] : [1, 2]}
         camera={{ position: [0, 0, 4.9], fov: 46 }}
         gl={{ alpha: true, antialias: true }}
         onCreated={({ gl }) => gl.setClearColor('#000000', 0)}
       >
         <Suspense fallback={null}>
-          <ReactorGroup mouse={mouse} reducedMotion={reducedMotion} effectsEnabled={effectsEnabled} />
+          <ReactorGroup
+            mouse={mouse}
+            reducedMotion={reducedMotion}
+            effectsEnabled={effectsEnabled}
+            sceneScale={sceneScale}
+          />
         </Suspense>
       </Canvas>
     </div>

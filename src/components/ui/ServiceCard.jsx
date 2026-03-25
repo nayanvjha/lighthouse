@@ -40,7 +40,7 @@ function ServiceCard({ icon, title, features, quote, cta = 'DISCUSS A PROJECT â†
 
   return (
     <div
-      className={`service-card-tilt ${isHovering ? 'is-hovering' : ''}`}
+      className={`service-card-tilt h-full ${isHovering ? 'is-hovering' : ''}`}
       style={{ transform, transition: isHovering ? 'transform 120ms linear' : 'transform 320ms ease-out' }}
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}

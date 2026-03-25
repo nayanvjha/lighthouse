@@ -69,12 +69,12 @@ function Services() {
   }, [])
 
   return (
-    <section id="services" ref={sectionRef} className="border-b border-accent-blue/25 px-4 py-18 md:px-12">
+    <section id="services" ref={sectionRef} className="border-b border-accent-blue/25 p-4 md:p-12 lg:p-20">
       <div className="mx-auto w-full max-w-6xl">
         <SectionLabel text="SERVICES_DIVISION" />
 
         <div ref={headingRef} className="mb-10 opacity-0">
-          <h2 data-animate="fadeInUp" className="font-heading text-4xl tracking-[0.08em] text-white md:text-5xl">
+          <h2 data-animate="fadeInUp" className="font-heading text-3xl tracking-[0.08em] text-white md:text-5xl">
             WHAT I BUILD
           </h2>
           <p className="mt-3 font-mono text-xs tracking-[0.12em] text-portal-green md:text-sm">
@@ -83,9 +83,13 @@ function Services() {
           <span ref={underlineRef} className="services-underline" aria-hidden="true" />
         </div>
 
-        <div ref={cardsRef} data-animate="staggerChildren" className="grid gap-6 md:grid-cols-2">
+        <div
+          ref={cardsRef}
+          data-animate="staggerChildren"
+          className="grid grid-cols-1 gap-6 md:auto-rows-fr md:grid-cols-2 xl:auto-rows-fr xl:grid-cols-4"
+        >
           {services.map((service, index) => (
-            <div key={service.title} className="service-card-reveal opacity-0">
+            <div key={service.title} className="service-card-reveal h-full opacity-0">
               <ServiceCard
                 icon={service.icon}
                 title={service.title}

@@ -15,7 +15,7 @@ const ringConfig = [
 ]
 
 function TechStack() {
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 1024)
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
   const sectionRef = useRef(null)
   const headingRef = useRef(null)
 
@@ -29,7 +29,7 @@ function TechStack() {
   )
 
   useEffect(() => {
-    const onResize = () => setIsMobile(window.innerWidth < 1024)
+    const onResize = () => setIsMobile(window.innerWidth < 768)
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [])
@@ -104,19 +104,19 @@ function TechStack() {
   }, [isMobile])
 
   return (
-    <section id="techstack" ref={sectionRef} className="border-b border-accent-blue/25 px-4 py-18 md:px-12">
+    <section id="techstack" ref={sectionRef} className="border-b border-accent-blue/25 p-4 md:p-12 lg:p-20">
       <div className="mx-auto w-full max-w-6xl">
         <SectionLabel text="DYSON_CORE" />
         <h2
           ref={headingRef}
           data-animate="fadeInUp"
-          className="mb-10 font-heading text-4xl tracking-[0.08em] text-white opacity-0 md:text-5xl"
+          className="mb-10 font-heading text-3xl tracking-[0.08em] text-white opacity-0 md:text-5xl"
         >
           TECHNOLOGIES I HARNESS
         </h2>
 
         {isMobile ? (
-          <div data-animate="staggerChildren" className="dyson-mobile-grid">
+          <div data-animate="staggerChildren" className="dyson-mobile-grid grid grid-cols-2 gap-4">
             {ringData.map((ring) => (
               <div key={ring.key} className={`dyson-mobile-group opacity-0 ${ring.isSecurity ? 'is-security' : ''}`}>
                 <h3>{ring.label}</h3>

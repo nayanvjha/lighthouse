@@ -77,7 +77,7 @@ function Navbar() {
             : 'bg-transparent'
         }`}
       >
-        <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 md:px-8">
+        <div className="mx-auto flex h-20 w-full max-w-6xl items-center justify-between px-4 md:px-12 lg:px-20">
           <button
             type="button"
             className="flex items-center gap-3 text-left"

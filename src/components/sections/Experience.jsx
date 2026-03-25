@@ -127,13 +127,13 @@ function Experience() {
   }, [])
 
   return (
-    <section id="experience" ref={sectionRef} className="border-b border-accent-blue/25 px-4 py-18 md:px-12">
+    <section id="experience" ref={sectionRef} className="border-b border-accent-blue/25 p-4 md:p-12 lg:p-20">
       <div className="mx-auto w-full max-w-6xl">
         <SectionLabel text="FLIGHT_PATH" />
         <h2
           ref={headingRef}
           data-animate="fadeInUp"
-          className="mb-10 font-heading text-4xl tracking-[0.08em] text-white opacity-0 md:text-5xl"
+          className="mb-10 font-heading text-3xl tracking-[0.08em] text-white opacity-0 md:text-5xl"
         >
           CAREER TRAJECTORY
         </h2>

@@ -520,35 +520,39 @@
 .about-layout-grid {
   display: grid;
   gap: 22px;
-  grid-template-areas:
-    'photo'
-    'content'
-    'reactor';
 }
 
 .about-reactor-col {
-  grid-area: reactor;
   width: min(150px, 56vw);
   justify-self: center;
+  position: relative;
+  z-index: 1;
 }
 
 .about-content-col {
-  grid-area: content;
+  position: relative;
+  z-index: 2;
 }
 
 .about-photo-col {
-  grid-area: photo;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .about-photo-frame {
   position: relative;
   display: grid;
   place-items: center;
+  z-index: 1;
 }
 
 .about-photo-image {
-  width: 180px;
-  height: 180px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   object-fit: cover;
   object-position: center top;
@@ -577,6 +581,7 @@
   min-height: 220px;
   display: grid;
   place-items: center;
+  z-index: 0;
 }
 
 .about-photo-radar-ring {
@@ -626,6 +631,7 @@
   gap: 7px;
   justify-items: center;
   text-align: center;
+  z-index: 1;
 }
 
 .about-photo-readout p {
@@ -727,8 +733,11 @@
 .service-card-title {
   margin: 0;
   font-family: 'Orbitron', sans-serif;
-  font-size: 1.2rem;
-  letter-spacing: 0.08em;
+  font-size: clamp(1rem, 1.1vw, 1.2rem);
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   color: rgba(255, 215, 0, 0.95);
 }
 
@@ -746,6 +755,7 @@
   letter-spacing: 0.04em;
   color: rgba(220, 232, 245, 0.86);
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .service-card-features li::before {
@@ -760,6 +770,7 @@
   line-height: 1.45;
   font-style: italic;
   color: rgba(164, 174, 186, 0.95);
+  overflow-wrap: anywhere;
 }
 
 .service-card-cta {
@@ -1833,18 +1844,19 @@ textarea:focus-visible {
 
   .flight-line,
   .flight-line-fill {
-    left: 10px;
+    left: 16px;
     transform: none;
+    width: 2px;
   }
 
   .flight-waypoint {
     justify-content: flex-start;
     min-height: 186px;
-    padding-left: 30px;
+    padding-left: 38px;
   }
 
   .flight-node {
-    left: 10px;
+    left: 16px;
     transform: translateX(-50%) scale(var(--node-scale));
   }
 
@@ -1886,8 +1898,8 @@ textarea:focus-visible {
   }
 
   .about-photo-image {
-    width: 180px;
-    height: 180px;
+    width: 160px;
+    height: 160px;
   }
 
   .about-content-col {
@@ -1921,16 +1933,7 @@ textarea:focus-visible {
   }
 }
 
-@media (min-width: 768px) and (max-width: 1023px) {
-  .about-layout-grid {
-    grid-template-columns: 38% 62%;
-    grid-template-areas:
-      'photo content'
-      'reactor content';
-    align-items: start;
-    gap: 20px;
-  }
-
+@media (min-width: 640px) and (max-width: 1023px) {
   .about-photo-image {
     width: 220px;
     height: 220px;
@@ -1942,15 +1945,6 @@ textarea:focus-visible {
 }
 
 @media (min-width: 1024px) {
-  .about-layout-grid {
-    grid-template-columns: 40% 60%;
-    grid-template-areas:
-      'photo content'
-      'reactor content';
-    align-items: start;
-    gap: 24px;
-  }
-
   .about-reactor-col {
     width: min(200px, 24vw);
     justify-self: center;
@@ -2008,9 +2002,15 @@ textarea:focus-visible {
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .dyson-mobile-grid {
     display: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .hero-content-layer {
+    padding: 16px 12px;
   }
 }
 

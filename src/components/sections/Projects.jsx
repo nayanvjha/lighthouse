@@ -103,20 +103,20 @@ function Projects() {
       : []
 
   return (
-    <section id="projects" ref={sectionRef} className="border-b border-accent-blue/25 px-4 py-18 md:px-12">
+    <section id="projects" ref={sectionRef} className="border-b border-accent-blue/25 p-4 md:p-12 lg:p-20">
       <div className="mx-auto w-full max-w-6xl">
         <SectionLabel text="MISSION_LOG" />
 
         <h2
           ref={headingRef}
           data-animate="fadeInUp"
-          className="mb-9 font-heading text-4xl tracking-[0.08em] text-white opacity-0 md:text-5xl"
+          className="mb-9 font-heading text-3xl tracking-[0.08em] text-white opacity-0 md:text-5xl"
         >
           COMPLETED MISSIONS
         </h2>
 
         <div className="grid gap-6 lg:grid-cols-5">
-          <aside ref={selectorRef} className="order-1 lg:order-2 lg:col-span-2">
+          <aside ref={selectorRef} className="order-2 lg:order-2 lg:col-span-2">
             <div data-animate="staggerChildren" className="mission-selector-list no-scrollbar">
               {projects.map((project, index) => (
                 <div key={project.codename} className="mission-selector-card opacity-0">
@@ -130,7 +130,7 @@ function Projects() {
             </div>
           </aside>
 
-          <div className="order-2 lg:order-1 lg:col-span-3">
+          <div className="order-1 lg:order-1 lg:col-span-3">
             <HudPanel className="mission-feature-panel" glowColor="accent-blue">
               <span ref={scanRef} className="mission-feature-scanline" aria-hidden="true" />
               <div ref={detailRef}>
