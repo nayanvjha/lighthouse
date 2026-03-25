@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import HudButton from '../ui/HudButton'
 import HudPanel from '../ui/HudPanel'
+import ErrorBoundary from '../ui/ErrorBoundary'
 
 const preheadlineText = '> SYSTEM ONLINE // DIMENSION C-137'
 const HeroScene = lazy(() => import('../canvas/HeroScene'))
@@ -9,8 +10,8 @@ const HeroScene = lazy(() => import('../canvas/HeroScene'))
 function Hero({ ready = true, reducedMotion = false }) {
   const [typedPreheadline, setTypedPreheadline] = useState('')
   const [scrolled, setScrolled] = useState(false)
+  const [introPlayed, setIntroPlayed] = useState(false)
 
-  const blackScreenRef = useRef(null)
   const sceneLayerRef = useRef(null)
   const subtitleRef = useRef(null)
   const actionsRef = useRef(null)
@@ -25,115 +26,75 @@ function Hero({ ready = true, reducedMotion = false }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // --- Entrance animation (runs once when ready becomes true) ---
   useEffect(() => {
-    if (!ready) {
+    if (!ready || introPlayed) {
       return undefined
     }
 
-    const forceReveal = () => {
-      if (blackScreenRef.current) {
-        gsap.set(blackScreenRef.current, { autoAlpha: 0, pointerEvents: 'none' })
-      }
-    }
-
-    // Failsafe so first-visit intro can never leave a black screen over content.
-    const revealFallback = window.setTimeout(forceReveal, 2600)
+    setIntroPlayed(true)
+    setTypedPreheadline('') // reset before typing
 
     if (reducedMotion) {
       setTypedPreheadline(preheadlineText)
-      gsap.set(sceneLayerRef.current, { autoAlpha: 1 })
-      gsap.set(headlineWordRefs.current.filter(Boolean), { autoAlpha: 1, y: 0 })
-      gsap.set([subtitleRef.current, actionsRef.current, badgeRef.current], { autoAlpha: 1, x: 0, y: 0 })
-      forceReveal()
-      return () => window.clearTimeout(revealFallback)
+      return undefined
     }
 
     const words = headlineWordRefs.current.filter(Boolean)
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
-    gsap.set(sceneLayerRef.current, { autoAlpha: 0 })
-    gsap.set(words, { y: 36, autoAlpha: 0 })
-    gsap.set([subtitleRef.current, actionsRef.current], { y: 24, autoAlpha: 0 })
-    gsap.set(badgeRef.current, { x: 50, autoAlpha: 0 })
-    gsap.set(blackScreenRef.current, { autoAlpha: 1 })
+    // Animate elements from slightly offset to their natural position.
+    gsap.set(words, { y: 30, opacity: 0 })
+    gsap.set([subtitleRef.current, actionsRef.current], { y: 20, opacity: 0 })
+    gsap.set(badgeRef.current, { x: 40, opacity: 0 })
 
     const typeState = { value: 0 }
 
-    tl.to(blackScreenRef.current, { duration: 0.3, autoAlpha: 1 })
-      .to(
-        sceneLayerRef.current,
-        {
-          duration: 1.6,
-          autoAlpha: 1,
+    tl.to(
+      typeState,
+      {
+        value: preheadlineText.length,
+        duration: 0.6,
+        ease: 'none',
+        onUpdate: () => {
+          setTypedPreheadline(preheadlineText.slice(0, Math.floor(typeState.value)))
         },
-        'sceneIn',
-      )
-      .to(
-        typeState,
-        {
-          value: preheadlineText.length,
-          duration: 0.5,
-          ease: 'none',
-          onUpdate: () => {
-            setTypedPreheadline(preheadlineText.slice(0, Math.floor(typeState.value)))
-          },
-        },
-        'sceneIn',
-      )
+      },
+      0,
+    )
       .to(
         words,
         {
           y: 0,
-          autoAlpha: 1,
-          duration: 0.35,
-          stagger: 0.08,
+          opacity: 1,
+          duration: 0.4,
+          stagger: 0.07,
         },
-        'sceneIn+=0.5',
+        0.1,
       )
       .to(
         subtitleRef.current,
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.3,
-        },
-        'sceneIn+=1.05',
+        { y: 0, opacity: 1, duration: 0.35 },
+        0.55,
       )
       .to(
         actionsRef.current,
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.3,
-        },
-        'sceneIn+=1.25',
+        { y: 0, opacity: 1, duration: 0.35 },
+        0.75,
       )
       .to(
         badgeRef.current,
-        {
-          x: 0,
-          autoAlpha: 1,
-          duration: 0.3,
-        },
-        'sceneIn+=1.35',
+        { x: 0, opacity: 1, duration: 0.35 },
+        0.85,
       )
-      .to(
-        blackScreenRef.current,
-        {
-          duration: 0.2,
-          autoAlpha: 0,
-          pointerEvents: 'none',
-        },
-        'sceneIn+=0.22',
-      )
-
-    tl.eventCallback('onComplete', forceReveal)
 
     return () => {
-      window.clearTimeout(revealFallback)
       tl.kill()
+      // If killed early, force everything visible so content is never hidden.
+      gsap.set(words, { clearProps: 'all' })
+      gsap.set([subtitleRef.current, actionsRef.current, badgeRef.current], { clearProps: 'all' })
     }
-  }, [ready, reducedMotion])
+  }, [ready, reducedMotion, introPlayed])
 
   const scrollTo = (id) => {
     const target = document.getElementById(id)
@@ -146,6 +107,9 @@ function Hero({ ready = true, reducedMotion = false }) {
 
   const headlineWords = ['I', 'BUILD', 'THINGS', 'FOR', 'THE', 'FUTURE.']
 
+  // Show pre-headline text immediately if intro already played or ready hasn't triggered yet
+  const displayPreheadline = introPlayed || !ready ? (typedPreheadline || preheadlineText) : typedPreheadline
+
   return (
     <section
       id="hero"
@@ -155,10 +119,12 @@ function Hero({ ready = true, reducedMotion = false }) {
           'radial-gradient(circle at 50% 38%, rgba(123, 47, 190, 0.34), rgba(5, 5, 16, 0.95) 56%, rgba(3, 3, 10, 1) 100%)',
       }}
     >
-      <div ref={sceneLayerRef} className="absolute inset-0 z-1 opacity-0 pointer-events-none">
-        <Suspense fallback={<div className="h-full w-full" />}>
-          <HeroScene className="h-full w-full" reducedMotion={reducedMotion} />
-        </Suspense>
+      <div ref={sceneLayerRef} className="absolute inset-0 z-1 pointer-events-none">
+        <ErrorBoundary fallback={<div className="h-full w-full" />}>
+          <Suspense fallback={<div className="h-full w-full" />}>
+            <HeroScene className="h-full w-full" reducedMotion={reducedMotion} />
+          </Suspense>
+        </ErrorBoundary>
       </div>
 
       <div
@@ -169,7 +135,7 @@ function Hero({ ready = true, reducedMotion = false }) {
         }}
       >
         <p className="hero-typewriter font-mono text-xs tracking-[0.18em] text-portal-green md:text-sm">
-          {typedPreheadline}
+          {displayPreheadline}
           <span className="hero-caret" aria-hidden="true">
             |
           </span>
@@ -240,8 +206,6 @@ function Hero({ ready = true, reducedMotion = false }) {
       >
         SCROLL TO LAUNCH ▼
       </button>
-
-      <div ref={blackScreenRef} className="pointer-events-none absolute inset-0 z-30 bg-black" />
     </section>
   )
 }

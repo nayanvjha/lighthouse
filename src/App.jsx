@@ -77,23 +77,21 @@ function PortfolioContent() {
 
   useEffect(() => {
     if (showLoading) {
+      // Lock scroll and pin to top during loading sequence.
       document.body.style.overflow = 'hidden'
       window.scrollTo(0, 0)
-    } else {
-      document.body.style.overflow = ''
-      window.scrollTo(0, 0)
+
+      // Fallback so the app can never stay stuck behind the loading layer.
+      const fallbackTimer = window.setTimeout(completeLoading, 4200)
+      return () => window.clearTimeout(fallbackTimer)
     }
 
-    if (!showLoading) {
-      return undefined
-    }
-
-    // Fallback to ensure first render never stays behind the loading layer.
-    const fallbackTimer = window.setTimeout(() => {
-      completeLoading()
-    }, 4200)
-
-    return () => window.clearTimeout(fallbackTimer)
+    // Loading just finished — unlock scroll and ensure we're at the top.
+    document.body.style.overflow = ''
+    window.scrollTo(0, 0)
+    // Extra RAF to catch any layout-shift induced scroll.
+    const rafId = requestAnimationFrame(() => window.scrollTo(0, 0))
+    return () => cancelAnimationFrame(rafId)
   }, [showLoading])
 
   useEffect(() => {
@@ -121,7 +119,9 @@ function PortfolioContent() {
   }, [])
 
   useEffect(() => {
-    if (reducedMotion || isMobile) {
+    // Don't initialise Lenis while the loading screen is active — it can
+    // hijack scroll position and push the viewport away from the top.
+    if (reducedMotion || isMobile || showLoading) {
       return undefined
     }
 
@@ -147,7 +147,7 @@ function PortfolioContent() {
       cancelAnimationFrame(rafId)
       lenis.destroy()
     }
-  }, [isMobile, reducedMotion])
+  }, [isMobile, reducedMotion, showLoading])
 
   const portalToastClassName = useMemo(
     () => `konami-toast ${konamiToast ? 'is-visible' : ''}`,

@@ -193,6 +193,7 @@ function HeroScene({ className = '', reducedMotion = false }) {
   const mouse = useRef({ x: 0, y: 0 })
   const isMobile = useIsMobile(768)
   const [gpuTier, setGpuTier] = useState(3)
+  const [hasCrashed, setHasCrashed] = useState(false)
   const gpu = useDetectGPU()
 
   useEffect(() => {
@@ -210,20 +211,31 @@ function HeroScene({ className = '', reducedMotion = false }) {
     mouse.current.y = -y
   }
 
-  if (reducedMotion || isMobile || gpuTier < 2) {
+  if (hasCrashed || reducedMotion || isMobile || gpuTier < 2) {
     return <div className={`${className} hero-scene-fallback`} />
   }
 
   return (
     <Canvas
       className={className}
-      gl={{ alpha: true, antialias: true }}
+      gl={{ alpha: true, antialias: true, failIfMajorPerformanceCaveat: true }}
       style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}
       dpr={isMobile ? [1, 1] : [1, 1.25]}
       camera={{ position: [0, 0.5, 9], fov: isMobile ? 55 : 45 }}
       onPointerMove={handlePointerMove}
       onCreated={({ gl }) => {
         gl.setClearColor('#000000', 0)
+
+        // Handle WebGL context loss gracefully.
+        const canvas = gl.domElement
+        const handleContextLost = (event) => {
+          event.preventDefault()
+          // eslint-disable-next-line no-console
+          console.warn('[HeroScene] WebGL context lost — falling back to static hero.')
+          setHasCrashed(true)
+        }
+
+        canvas.addEventListener('webglcontextlost', handleContextLost)
       }}
     >
       <Suspense fallback={null}>
