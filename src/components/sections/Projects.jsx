@@ -103,9 +103,9 @@ function Projects() {
       : []
 
   return (
-    <section id="projects" ref={sectionRef} className="border-b border-accent-blue/25 p-4 md:p-12 lg:p-20">
+    <section id="projects" ref={sectionRef} className="border-b border-[#00d4ff]/25 p-4 md:p-12 lg:p-20">
       <div className="mx-auto w-full max-w-6xl">
-        <SectionLabel text="MISSION_LOG" />
+        <SectionLabel text="PROJECTS" />
 
         <h2
           ref={headingRef}

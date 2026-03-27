@@ -4,11 +4,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        'space-black': '#050510',
-        'accent-blue': '#00A3FF',
-        'stark-gold': '#FFD700',
-        'portal-green': '#39FF14',
-        'nebula-purple': '#7B2FBE',
+        'space-black': '#050505',
+        'accent-blue': '#00D4FF',
+        'stark-gold': '#00D4FF',
+        'portal-green': '#B197FC',
+        'nebula-purple': '#7C3AED',
       },
       fontFamily: {
         heading: ['Orbitron', 'sans-serif'],
@@ -21,8 +21,8 @@ export default {
           '50%': { transform: 'translateY(-12px)' },
         },
         'pulse-glow': {
-          '0%, 100%': { boxShadow: '0 0 10px rgba(0, 163, 255, 0.45)' },
-          '50%': { boxShadow: '0 0 24px rgba(0, 163, 255, 0.8)' },
+          '0%, 100%': { boxShadow: '0 0 10px rgba(0, 212, 255, 0.45)' },
+          '50%': { boxShadow: '0 0 24px rgba(0, 212, 255, 0.8)' },
         },
         scanline: {
           '0%': { transform: 'translateY(-100%)' },

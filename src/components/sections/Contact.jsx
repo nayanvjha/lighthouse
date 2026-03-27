@@ -139,11 +139,11 @@ function Contact() {
   ]
 
   return (
-    <section id="contact" ref={sectionRef} className="mars-section border-b border-accent-blue/25 p-4 md:p-12 lg:p-20">
+    <section id="contact" ref={sectionRef} className="mars-section border-b border-[#00d4ff]/25 p-4 md:p-12 lg:p-20">
       <div className="mars-noise" aria-hidden="true" />
 
       <div className="relative z-10 mx-auto w-full max-w-6xl">
-        <SectionLabel text="MARS_COLONY_COMMS" />
+        <SectionLabel text="CONTACT" />
         <div ref={headingRef} className="opacity-0">
           <h2 data-animate="fadeInUp" className="font-heading text-3xl tracking-[0.08em] text-white md:text-5xl">
             LET&apos;S BUILD THE FUTURE
@@ -213,7 +213,7 @@ function Contact() {
 
               {submitted ? (
                 <HudPanel className="mt-4" glowColor="portal-green">
-                  <p className="font-mono text-sm text-portal-green">
+                  <p className="font-mono text-sm text-[#b197fc]">
                     Message received. I&apos;ll respond within 24 hours.
                   </p>
                 </HudPanel>
@@ -234,7 +234,7 @@ function Contact() {
             </HudPanel>
 
             <HudPanel className="mars-side-panel opacity-0" glowColor="portal-green">
-              <p className="font-mono text-xs tracking-[0.12em] text-portal-green md:text-sm">
+              <p className="font-mono text-xs tracking-[0.12em] text-[#b197fc] md:text-sm">
                 <span className="availability-dot" aria-hidden="true" /> CURRENTLY AVAILABLE FOR FREELANCE MISSIONS
               </p>
             </HudPanel>

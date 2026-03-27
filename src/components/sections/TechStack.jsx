@@ -104,9 +104,9 @@ function TechStack() {
   }, [isMobile])
 
   return (
-    <section id="techstack" ref={sectionRef} className="border-b border-accent-blue/25 p-4 md:p-12 lg:p-20">
+    <section id="techstack" ref={sectionRef} className="border-b border-[#00d4ff]/25 p-4 md:p-12 lg:p-20">
       <div className="mx-auto w-full max-w-6xl">
-        <SectionLabel text="DYSON_CORE" />
+        <SectionLabel text="TECH_STACK" />
         <h2
           ref={headingRef}
           data-animate="fadeInUp"

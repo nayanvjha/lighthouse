@@ -158,7 +158,7 @@ function About() {
   }, [])
 
   return (
-    <section id="about" ref={sectionRef} className="border-b border-accent-blue/25 p-4 md:p-12 lg:p-20">
+    <section id="about" ref={sectionRef} className="border-b border-[#00d4ff]/25 p-4 md:p-12 lg:p-20">
       <div className="mx-auto w-full max-w-6xl">
         <div className="mt-5 grid grid-cols-1 gap-6 lg:grid-cols-5 lg:items-start lg:gap-8">
           <div ref={photoWrapRef} className="about-photo-col order-1 lg:col-span-2">
@@ -199,7 +199,7 @@ function About() {
             ref={contentWrapRef}
             className="about-content-col order-2 opacity-0 lg:col-span-3"
           >
-            <SectionLabel text="ABOUT_PILOT" />
+            <SectionLabel text="ABOUT" />
             <h2 data-animate="fadeInUp" className="font-heading text-3xl tracking-[0.08em] text-white md:text-5xl">
               THE PILOT
             </h2>
@@ -213,7 +213,7 @@ function About() {
             </p>
 
             <HudPanel className="mt-5" glowColor="accent-blue">
-              <p className="font-mono text-xs tracking-[0.12em] text-accent-blue md:text-sm">
+              <p className="font-mono text-xs tracking-[0.12em] text-[#00d4ff] md:text-sm">
                 Research Mentor: Prof. B. K. Panigrahi, Dean, IIT Delhi
               </p>
             </HudPanel>

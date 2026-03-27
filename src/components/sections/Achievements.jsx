@@ -75,9 +75,9 @@ function Achievements() {
   }, [])
 
   return (
-    <section id="achievements" ref={sectionRef} className="border-b border-accent-blue/25 p-4 md:p-12 lg:p-20">
+    <section id="achievements" ref={sectionRef} className="border-b border-[#00d4ff]/25 p-4 md:p-12 lg:p-20">
       <div className="mx-auto w-full max-w-6xl">
-        <SectionLabel text="ACHIEVEMENTS_UNLOCKED" />
+        <SectionLabel text="ACHIEVEMENTS" />
         <h2
           ref={headingRef}
           data-animate="fadeInUp"

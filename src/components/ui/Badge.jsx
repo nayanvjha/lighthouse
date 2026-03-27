@@ -1,7 +1,7 @@
 const palette = {
-  'accent-blue': 'rgba(0, 163, 255, 0.55)',
-  'portal-green': 'rgba(57, 255, 20, 0.55)',
-  'stark-gold': 'rgba(255, 215, 0, 0.55)',
+  'accent-blue': 'rgba(0, 212, 255, 0.55)',
+  'portal-green': 'rgba(177, 151, 252, 0.55)',
+  'stark-gold': 'rgba(0, 212, 255, 0.55)',
 }
 
 function Badge({ text, glowColor = 'accent-blue' }) {

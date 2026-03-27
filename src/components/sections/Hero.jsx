@@ -1,10 +1,10 @@
-import { Suspense, lazy, useEffect, useRef, useState } from 'react'
+import { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import HudButton from '../ui/HudButton'
 import HudPanel from '../ui/HudPanel'
 import ErrorBoundary from '../ui/ErrorBoundary'
 
-const preheadlineText = '> SYSTEM ONLINE // DIMENSION C-137'
+const preheadlineText = '> SYSTEM ONLINE // NAYAN KUMAR'
 const HeroScene = lazy(() => import('../canvas/HeroScene'))
 
 function Hero({ ready = true, reducedMotion = false }) {
@@ -27,20 +27,23 @@ function Hero({ ready = true, reducedMotion = false }) {
   }, [])
 
   // --- Entrance animation (runs once when ready becomes true) ---
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!ready || introPlayed) {
       return undefined
     }
 
-    setIntroPlayed(true)
-    setTypedPreheadline('') // reset before typing
+    requestAnimationFrame(() => {
+      setIntroPlayed(true)
+      setTypedPreheadline('')
+    })
 
     if (reducedMotion) {
-      setTypedPreheadline(preheadlineText)
+      requestAnimationFrame(() => setTypedPreheadline(preheadlineText))
       return undefined
     }
 
     const words = headlineWordRefs.current.filter(Boolean)
+    const animatedElements = [sceneLayerRef.current, ...words, subtitleRef.current, actionsRef.current, badgeRef.current]
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
     // Animate elements from slightly offset to their natural position.
@@ -88,11 +91,20 @@ function Hero({ ready = true, reducedMotion = false }) {
         0.85,
       )
 
+    const forceVisibleTimeout = window.setTimeout(() => {
+      gsap.set(animatedElements, {
+        opacity: 1,
+        y: 0,
+        x: 0,
+      })
+    }, 3000)
+
     return () => {
+      window.clearTimeout(forceVisibleTimeout)
       tl.kill()
-      // If killed early, force everything visible so content is never hidden.
-      gsap.set(words, { clearProps: 'all' })
-      gsap.set([subtitleRef.current, actionsRef.current, badgeRef.current], { clearProps: 'all' })
+
+      // If interrupted, revert to natural CSS-visible state.
+      gsap.set(animatedElements, { clearProps: 'all' })
     }
   }, [ready, reducedMotion, introPlayed])
 
@@ -116,7 +128,7 @@ function Hero({ ready = true, reducedMotion = false }) {
       className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 pb-12 pt-20 md:px-12 md:pb-16 md:pt-24 lg:px-20"
       style={{
         background:
-          'radial-gradient(circle at 50% 38%, rgba(123, 47, 190, 0.34), rgba(5, 5, 16, 0.95) 56%, rgba(3, 3, 10, 1) 100%)',
+          'radial-gradient(circle at 50% 38%, rgba(124, 58, 237, 0.15), rgba(5, 5, 5, 0.95) 56%, rgba(23, 20, 18, 1) 100%)',
       }}
     >
       <div ref={sceneLayerRef} className="absolute inset-0 z-1 pointer-events-none">
@@ -131,17 +143,17 @@ function Hero({ ready = true, reducedMotion = false }) {
         className="hero-content-layer relative z-20 mx-auto flex w-full max-w-6xl flex-col items-center text-center"
         style={{
           background:
-            'radial-gradient(ellipse at center, rgba(5,5,16,0.85) 0%, rgba(5,5,16,0.5) 60%, transparent 100%)',
+            'radial-gradient(ellipse at center, rgba(5,5,5,0.85) 0%, rgba(5,5,5,0.5) 60%, transparent 100%)',
         }}
       >
-        <p className="hero-typewriter font-mono text-xs tracking-[0.18em] text-portal-green md:text-sm">
+          <p className="hero-typewriter font-mono text-xs tracking-[0.18em] text-[#b197fc] md:text-sm">
           {displayPreheadline}
           <span className="hero-caret" aria-hidden="true">
             |
           </span>
         </p>
 
-        <h1 className="mt-5 flex flex-wrap justify-center gap-x-2 gap-y-1 wrap-break-word px-1 font-heading text-[2rem] leading-[1.05] tracking-[0.08em] text-white drop-shadow-[0_0_16px_rgba(0,163,255,0.45)] sm:text-[2.5rem] md:text-[5rem]">
+        <h1 className="mt-5 flex flex-wrap justify-center gap-x-2 gap-y-1 wrap-break-word px-1 font-heading text-[2rem] leading-[1.05] tracking-[0.08em] text-white drop-shadow-[0_0_16px_rgba(0,212,255,0.3)] sm:text-[2.5rem] md:text-[5rem]">
           {headlineWords.slice(0, 3).map((word, index) => (
             <span
               key={word}
@@ -169,7 +181,7 @@ function Hero({ ready = true, reducedMotion = false }) {
           ref={subtitleRef}
           data-animate="fadeInUp"
           className="mt-5 max-w-2xl text-sm leading-relaxed text-gray-300 sm:text-base md:text-[1.15rem]"
-          style={{ textShadow: '0 0 20px rgba(5,5,16,0.8), 0 2px 4px rgba(0,0,0,0.5)' }}
+          style={{ textShadow: '0 0 20px rgba(5,5,5,0.8), 0 2px 4px rgba(0,0,0,0.5)' }}
         >
           Full-stack developer &amp; cybersecurity specialist building secure apps, web platforms
           &amp; intelligent systems. Research Intern at Bosch. Formerly EY &amp; CDAC.
@@ -180,10 +192,10 @@ function Hero({ ready = true, reducedMotion = false }) {
           className="mt-8 flex w-full max-w-md flex-col gap-3 pointer-events-auto md:flex-row md:justify-center"
         >
           <HudButton variant="blue" onClick={() => scrollTo('projects')} className="w-full justify-center md:w-auto">
-            EXPLORE MISSIONS
+            VIEW PROJECTS
           </HudButton>
           <HudButton variant="green" onClick={() => scrollTo('contact')} className="w-full justify-center md:w-auto">
-            INITIATE CONTACT
+            GET IN TOUCH
           </HudButton>
         </div>
       </div>
@@ -192,7 +204,7 @@ function Hero({ ready = true, reducedMotion = false }) {
         <HudPanel className="min-w-55" glowColor="portal-green">
           <div className="flex items-center gap-2">
             <span className="hero-status-dot" aria-hidden="true" />
-            <span className="font-mono text-[10px] tracking-[0.16em] text-portal-green md:text-xs">
+            <span className="font-mono text-[10px] tracking-[0.16em] text-[#b197fc] md:text-xs">
               AVAILABLE FOR FREELANCE
             </span>
           </div>

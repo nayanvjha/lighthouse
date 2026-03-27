@@ -14,6 +14,10 @@ function useScrollAnimations(scopeRef, disabled = false) {
       const elements = gsap.utils.toArray('[data-animate]')
 
       elements.forEach((element) => {
+        if (!(element instanceof Element)) {
+          return
+        }
+
         const animation = element.getAttribute('data-animate')
 
         if (animation === 'fadeInUp') {
@@ -89,8 +93,12 @@ function useScrollAnimations(scopeRef, disabled = false) {
         }
 
         if (animation === 'staggerChildren') {
-          const targets = element.querySelectorAll('[data-stagger-item], > *')
-          if (!targets.length) {
+          // Prefer explicit stagger markers; otherwise animate direct children.
+          const markedTargets = Array.from(element.querySelectorAll('[data-stagger-item]'))
+          const fallbackTargets = Array.from(element.children)
+          const targets = markedTargets.length > 0 ? markedTargets : fallbackTargets
+
+          if (targets.length === 0) {
             return
           }
 

@@ -1,4 +1,4 @@
-import { Suspense, memo, useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, memo, useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Sparkles, Torus, useDetectGPU } from '@react-three/drei'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
@@ -110,16 +110,8 @@ function ArcReactor() {
   const mouse = useRef({ x: 0, y: 0 })
   const reducedMotion = useReducedMotion()
   const isMobile = useIsMobile(768)
-  const [gpuTier, setGpuTier] = useState(3)
   const gpu = useDetectGPU()
-
-  useEffect(() => {
-    if (!gpu) {
-      return
-    }
-
-    setGpuTier(gpu.tier ?? 3)
-  }, [gpu])
+  const gpuTier = gpu?.tier ?? 3
 
   const effectsEnabled = !reducedMotion && gpuTier >= 2
   const sceneScale = isMobile ? 0.62 : 1

@@ -1,4 +1,4 @@
-import { Suspense, memo, useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, memo, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Float, Stars, Text, Torus, useDetectGPU } from '@react-three/drei'
 import useIsMobile from '../../hooks/useIsMobile'
@@ -110,19 +110,19 @@ const Scene = memo(function Scene({ isMobile, reducedMotion, mouse }) {
       </group>
 
       <ambientLight intensity={0.28} />
-      <pointLight color="#b2dbff" intensity={2} distance={22} position={[0, 0, 0]} />
+      <pointLight color="#7feaff" intensity={2} distance={22} position={[0, 0, 0]} />
 
       <group ref={coreRef} position={[1.2, 0.9, 0]} scale={0.8}>
         <mesh>
           <icosahedronGeometry args={[2, 0]} />
-          <meshStandardMaterial color="#00A3FF" emissive="#0089d6" emissiveIntensity={0.4} wireframe />
+          <meshStandardMaterial color="#00d4ff" emissive="#00a8cc" emissiveIntensity={0.4} wireframe />
         </mesh>
 
         <mesh>
           <sphereGeometry args={[0.8, 48, 48]} />
           <meshStandardMaterial
-            color="#9ad8ff"
-            emissive="#00A3FF"
+            color="#b9f5ff"
+            emissive="#00d4ff"
             emissiveIntensity={1.5}
             roughness={0.2}
             metalness={0.1}
@@ -144,7 +144,7 @@ const Scene = memo(function Scene({ isMobile, reducedMotion, mouse }) {
               ringsRef.current[index] = node
             }}
           >
-            <meshStandardMaterial color="#00A3FF" emissive="#00A3FF" emissiveIntensity={0.55} />
+            <meshStandardMaterial color="#00d4ff" emissive="#00d4ff" emissiveIntensity={0.55} />
           </Torus>
         ))}
       </group>
@@ -160,11 +160,11 @@ const Scene = memo(function Scene({ isMobile, reducedMotion, mouse }) {
           {obj.type === 'text' ? (
             <Text
               fontSize={0.6}
-              color="#39FF14"
+              color="#b197fc"
               anchorX="center"
               anchorY="middle"
               outlineBlur={0.4}
-              outlineColor="#00A3FF"
+              outlineColor="#00d4ff"
             >
               {'< />'}
             </Text>
@@ -173,14 +173,14 @@ const Scene = memo(function Scene({ isMobile, reducedMotion, mouse }) {
           {obj.type === 'octa' ? (
             <mesh>
               <octahedronGeometry args={[0.35, 0]} />
-              <meshStandardMaterial color="#00A3FF" emissive="#005d96" emissiveIntensity={0.8} />
+              <meshStandardMaterial color="#00d4ff" emissive="#008bb8" emissiveIntensity={0.8} />
             </mesh>
           ) : null}
 
           {obj.type === 'cone' ? (
             <mesh rotation={[Math.PI, 0, 0]}>
               <coneGeometry args={[0.24, 0.7, 24]} />
-              <meshStandardMaterial color="#FFD700" emissive="#af8f00" emissiveIntensity={0.45} />
+              <meshStandardMaterial color="#00d4ff" emissive="#0099c7" emissiveIntensity={0.45} />
             </mesh>
           ) : null}
         </OrbitingObject>
@@ -192,17 +192,9 @@ const Scene = memo(function Scene({ isMobile, reducedMotion, mouse }) {
 function HeroScene({ className = '', reducedMotion = false }) {
   const mouse = useRef({ x: 0, y: 0 })
   const isMobile = useIsMobile(768)
-  const [gpuTier, setGpuTier] = useState(3)
   const [hasCrashed, setHasCrashed] = useState(false)
   const gpu = useDetectGPU()
-
-  useEffect(() => {
-    if (!gpu) {
-      return
-    }
-
-    setGpuTier(gpu.tier ?? 3)
-  }, [gpu])
+  const gpuTier = gpu?.tier ?? 3
 
   const handlePointerMove = (event) => {
     const x = (event.clientX / window.innerWidth) * 2 - 1
@@ -230,7 +222,6 @@ function HeroScene({ className = '', reducedMotion = false }) {
         const canvas = gl.domElement
         const handleContextLost = (event) => {
           event.preventDefault()
-          // eslint-disable-next-line no-console
           console.warn('[HeroScene] WebGL context lost — falling back to static hero.')
           setHasCrashed(true)
         }

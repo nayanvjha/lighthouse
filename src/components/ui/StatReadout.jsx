@@ -13,9 +13,9 @@ function StatReadout({ label, value, description, start = false, delay = 0 }) {
     }
 
     hasStartedRef.current = true
-    setIsAnimating(true)
 
     const timeoutId = window.setTimeout(() => {
+      setIsAnimating(true)
       let labelTick = 0
       const labelSpeed = Math.max(14, Math.floor(500 / Math.max(label.length, 1)))
       const labelTimer = window.setInterval(() => {

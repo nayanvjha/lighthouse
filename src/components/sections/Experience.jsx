@@ -110,7 +110,7 @@ function Experience() {
         )
 
         gsap.to(node, {
-          '--node-glow': 'rgba(57, 255, 20, 0.95)',
+          '--node-glow': 'rgba(177, 151, 252, 0.95)',
           '--node-scale': 1,
           duration: 0.4,
           ease: 'power2.out',
@@ -127,9 +127,9 @@ function Experience() {
   }, [])
 
   return (
-    <section id="experience" ref={sectionRef} className="border-b border-accent-blue/25 p-4 md:p-12 lg:p-20">
+    <section id="experience" ref={sectionRef} className="border-b border-[#00d4ff]/25 p-4 md:p-12 lg:p-20">
       <div className="mx-auto w-full max-w-6xl">
-        <SectionLabel text="FLIGHT_PATH" />
+        <SectionLabel text="EXPERIENCE" />
         <h2
           ref={headingRef}
           data-animate="fadeInUp"

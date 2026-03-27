@@ -3,7 +3,8 @@ import { useEffect, useMemo, useState } from 'react'
 const navItems = [
   { label: 'About', id: 'about' },
   { label: 'Services', id: 'services' },
-  { label: 'Missions', id: 'projects' },
+  { label: 'Projects', id: 'projects' },
+  { label: 'SCANNER', id: 'exposure-scanner' },
   { label: 'Experience', id: 'experience' },
   { label: 'Contact', id: 'contact' },
 ]
@@ -73,7 +74,7 @@ function Navbar() {
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
           scrolled
-            ? 'border-b border-accent-blue/40 bg-space-black/55 backdrop-blur-md shadow-[0_0_20px_rgba(0,163,255,0.22)]'
+            ? 'border-b border-accent-blue/40 bg-space-black/55 backdrop-blur-md shadow-[0_0_20px_rgba(0,212,255,0.22)]'
             : 'bg-transparent'
         }`}
       >
@@ -106,7 +107,7 @@ function Navbar() {
           </nav>
 
           <div className="hidden md:block">
-            <span className="font-mono text-sm tracking-[0.25em] text-portal-green">[C-137]</span>
+            <span className="font-mono text-sm tracking-[0.25em] text-[#b197fc]">[NK]</span>
           </div>
 
           <button
@@ -133,7 +134,7 @@ function Navbar() {
             <span className="font-heading text-2xl tracking-[0.24em] text-white">NK</span>
             <button
               type="button"
-              className="font-mono text-xs tracking-[0.24em] text-accent-blue"
+              className="font-mono text-xs tracking-[0.24em] text-[#00d4ff]"
               onClick={() => setMenuOpen(false)}
             >
               [ CLOSE ]
@@ -158,7 +159,7 @@ function Navbar() {
           </div>
 
           <div className="mt-10 border-t border-accent-blue/30 pt-6">
-            <span className="font-mono text-xs tracking-[0.25em] text-portal-green">[C-137]</span>
+            <span className="font-mono text-xs tracking-[0.25em] text-[#b197fc]">[NK]</span>
           </div>
         </div>
       </div>

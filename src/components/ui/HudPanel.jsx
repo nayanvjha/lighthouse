@@ -1,7 +1,7 @@
 const glowPalette = {
-  'accent-blue': 'rgba(0, 163, 255, 0.7)',
-  'portal-green': 'rgba(57, 255, 20, 0.72)',
-  'stark-gold': 'rgba(255, 215, 0, 0.72)',
+  'accent-blue': 'rgba(0, 212, 255, 0.7)',
+  'portal-green': 'rgba(177, 151, 252, 0.72)',
+  'stark-gold': 'rgba(0, 212, 255, 0.72)',
 }
 
 function HudPanel({ children, className = '', glowColor = 'accent-blue', hover = false }) {

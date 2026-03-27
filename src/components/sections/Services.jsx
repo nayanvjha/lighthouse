@@ -69,15 +69,15 @@ function Services() {
   }, [])
 
   return (
-    <section id="services" ref={sectionRef} className="border-b border-accent-blue/25 p-4 md:p-12 lg:p-20">
+    <section id="services" ref={sectionRef} className="border-b border-[#00d4ff]/25 p-4 md:p-12 lg:p-20">
       <div className="mx-auto w-full max-w-6xl">
-        <SectionLabel text="SERVICES_DIVISION" />
+        <SectionLabel text="SERVICES" />
 
         <div ref={headingRef} className="mb-10 opacity-0">
           <h2 data-animate="fadeInUp" className="font-heading text-3xl tracking-[0.08em] text-white md:text-5xl">
             WHAT I BUILD
           </h2>
-          <p className="mt-3 font-mono text-xs tracking-[0.12em] text-portal-green md:text-sm">
+          <p className="mt-3 font-mono text-xs tracking-[0.12em] text-[#b197fc] md:text-sm">
             Security-first engineering for every project.
           </p>
           <span ref={underlineRef} className="services-underline" aria-hidden="true" />

@@ -1,18 +1,18 @@
 const variants = {
   blue: {
-    color: 'rgba(0, 163, 255, 1)',
-    border: 'rgba(0, 163, 255, 0.65)',
-    fill: 'rgba(0, 163, 255, 0.14)',
+    color: 'rgba(0, 212, 255, 1)',
+    border: 'rgba(0, 212, 255, 0.65)',
+    fill: 'rgba(0, 212, 255, 0.14)',
   },
   green: {
-    color: 'rgba(57, 255, 20, 1)',
-    border: 'rgba(57, 255, 20, 0.65)',
-    fill: 'rgba(57, 255, 20, 0.14)',
+    color: 'rgba(177, 151, 252, 1)',
+    border: 'rgba(177, 151, 252, 0.65)',
+    fill: 'rgba(177, 151, 252, 0.14)',
   },
   gold: {
-    color: 'rgba(255, 215, 0, 1)',
-    border: 'rgba(255, 215, 0, 0.65)',
-    fill: 'rgba(255, 215, 0, 0.14)',
+    color: 'rgba(0, 212, 255, 1)',
+    border: 'rgba(0, 212, 255, 0.65)',
+    fill: 'rgba(0, 212, 255, 0.14)',
   },
 }
 
